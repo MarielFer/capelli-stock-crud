@@ -20,9 +20,17 @@ namespace CapelliStock.Controllers
         }
 
         // GET: Productos
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string searchString)
         {
-            return View(await _context.Productos.ToListAsync());
+            var productos = from p in _context.Productos
+                            select p;
+
+            if (!string.IsNullOrEmpty(searchString))
+            {
+                productos = productos.Where(p => p.Nombre.Contains(searchString));
+            }
+
+            return View(await productos.ToListAsync());
         }
 
         // GET: Productos/Details/5
