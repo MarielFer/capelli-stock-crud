@@ -21,5 +21,7 @@ namespace CapelliStock.Models
         [Required(ErrorMessage = "El stock es obligatorio")]
         [Range(0, 10000, ErrorMessage = "El stock no puede ser negativo")]
         public int Stock { get; set; }
+
+
     }
 }
