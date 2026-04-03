@@ -1,12 +1,14 @@
-﻿using System;
+﻿using CapelliStock.Data;
+using CapelliStock.Models;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Filters;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
-using CapelliStock.Data;
-using CapelliStock.Models;
+using Microsoft.AspNetCore.Mvc.Filters;
 
 namespace CapelliStock.Controllers
 {
@@ -18,7 +20,17 @@ namespace CapelliStock.Controllers
         {
             _context = context;
         }
+        public override void OnActionExecuting(ActionExecutingContext context)
+        {
+            var user = HttpContext.Session.GetString("User");
 
+            if (user == null)
+            {
+                context.Result = RedirectToAction("Login", "Account");
+            }
+
+            base.OnActionExecuting(context);
+        }
         // GET: Productos
         public async Task<IActionResult> Index(string searchString)
         {
